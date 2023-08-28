@@ -1,0 +1,7 @@
+#MyConfig
+api.estudo/bin/*
+api.estudo/obj/*
+ui-pokemon/angular/.cache/*
+ui-pokemon/node_modules/*
+data-python/__pycache__/*
+
