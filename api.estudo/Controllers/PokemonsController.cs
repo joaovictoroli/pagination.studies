@@ -6,7 +6,9 @@ using api.estudo.Interface;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Hosting;
 using System.Web;
-
+using System.Linq.Expressions;
+using Microsoft.IdentityModel.Tokens;
+using System.Runtime.InteropServices;
 
 namespace api.estudo.Controllers
 {
@@ -26,7 +28,7 @@ namespace api.estudo.Controllers
         {
             var pokemons = await _pokemonRepository.GetAllPokemonAsync(paginationParams);
 
-            Response.Headers.Add("Pagination", "151");
+            Response.AddPaginationHeader(new PaginationHeader(151));
             return Ok(pokemons);
         }
 
@@ -55,6 +57,38 @@ namespace api.estudo.Controllers
                                                                                 [FromQuery] PaginationParams paginationParams)
         {
             (var pokemons, var totalItems) = await _pokemonRepository.GetPokemonsByFilters(nameFilter, typeFilter, paginationParams);
+
+            Response.Headers.Add("Pagination", totalItems.ToString());
+            return Ok(pokemons);
+        }
+
+        [HttpGet("allInOne")]
+        public async Task<ActionResult<IEnumerable<Pokemon>>> GetPokemonAllInOne([FromQuery] PaginationParams paginationParams,
+                                                                                [FromQuery] string? nameFilter,
+                                                                                [FromQuery] string? typeFilter
+                                                                               )
+        {
+            var pokemons = new List<Pokemon>();
+            int totalItems;
+            switch (String.IsNullOrEmpty(nameFilter), String.IsNullOrEmpty(typeFilter))
+            {
+                case (true, false):
+                    (pokemons, totalItems) = await _pokemonRepository.GetPokemonsAllInOne(typeFilter, paginationParams);
+                    break;
+
+                case (false, true):
+                    (pokemons, totalItems) = await _pokemonRepository.GetPokemonsByFilterName(nameFilter, paginationParams);
+                    break;
+
+                case (true, true):
+                    (pokemons, totalItems) = await _pokemonRepository.GetPokemonsAllInOne(paginationParams);
+                    break;
+
+                case (false, false):
+                    (pokemons, totalItems) = await _pokemonRepository.GetPokemonsAllInOne(nameFilter, typeFilter, paginationParams);
+                    break;
+
+            }           
 
             Response.Headers.Add("Pagination", totalItems.ToString());
             return Ok(pokemons);

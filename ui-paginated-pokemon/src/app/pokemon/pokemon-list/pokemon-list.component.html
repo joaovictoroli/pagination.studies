@@ -1,0 +1,63 @@
+<!-- filtering -->
+<div class="filters">
+  <form>
+    <mat-form-field class="mat-form-field">
+      <mat-label>Filter</mat-label>
+      <input
+        matInput
+        placeholder="Name Filter"
+        [(ngModel)]="nameFilterValue"
+        [ngModelOptions]="{ standalone: true }"
+        required
+      />
+    </mat-form-field>
+  </form>
+</div>
+<button class="mat-btn" mat-raised-button (click)="nameFilter(nameFilterValue)">
+  Submit
+</button>
+<p>{{ typeFilterValue }}</p>
+<!-- filtering -->
+
+<!-- table list -->
+<div class="container">
+  <table class="table table-hover">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Name</th>
+        <th scope="col">Type</th>
+        <th scope="col">Type 2</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr
+        *ngFor="let pokemon of pokemons"
+        (click)="open_detail(pokemon.id)"
+        clickable
+      >
+        <th scope="row">{{ pokemon.id }}</th>
+        <td scope="row">{{ pokemon.name }}</td>
+        <td scope="row">{{ pokemon.type }}</td>
+        <td scope="row" *ngIf="pokemon.type2; else noType2">
+          {{ pokemon.type2 }}
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <ng-template #noType2>
+    <td>-</td>
+  </ng-template>
+</div>
+<!-- table list -->
+
+<!-- pagination -->
+<pagination
+  class="pagination"
+  [totalItems]="totalItens"
+  (pageChanged)="pageChanged($event)"
+  [itemsPerPage]="10"
+>
+</pagination>
+<!-- pagination -->

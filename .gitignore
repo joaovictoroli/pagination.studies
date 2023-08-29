@@ -5,3 +5,5 @@ ui-pokemon/angular/.cache/*
 ui-pokemon/node_modules/*
 data-python/__pycache__/*
 
+
+ui-pokemon

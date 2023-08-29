@@ -12,5 +12,13 @@ namespace api.estudo.Interface
         Task<(List<Pokemon>, int)> GetPokemonsByFilterName(string nameFilter, PaginationParams paginationParams);
 
         Task<(List<Pokemon>, int)> GetPokemonsByFilters(string nameFilter, string typeFilter, PaginationParams paginationParams);
+
+
+
+        Task<(List<Pokemon>, int)> GetPokemonsAllInOne(string nameFilter, string typeFilter, PaginationParams paginationParams);
+
+        Task<(List<Pokemon>, int)> GetPokemonsAllInOne(string typeFilter, PaginationParams paginationParams);
+
+        Task<(List<Pokemon>, int)> GetPokemonsAllInOne(PaginationParams paginationParams);
     }
 }

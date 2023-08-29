@@ -62,5 +62,44 @@ namespace api.estudo.Data
 
             return (list, totalItems);
         }
+
+        public async Task<(List<Pokemon>, int)> GetPokemonsAllInOne(string nameFilter, string typeFilter, PaginationParams paginationParams)
+        {
+            var query = _dbContext.Pokemons.Where(x => x.Name.Contains(nameFilter))
+                            .Where(x => x.Type == typeFilter || x.Type2 == typeFilter)
+                            .AsQueryable();
+
+            var totalItems = await query.CountAsync();
+            var list = await query.AsNoTracking()
+                       .Skip((paginationParams.PageNumber - 1) * paginationParams.ItemsInPage)
+                       .Take(paginationParams.ItemsInPage).ToListAsync();
+
+            return (list, totalItems);
+        }
+
+        public async Task<(List<Pokemon>, int)> GetPokemonsAllInOne(string typeFilter, PaginationParams paginationParams)
+        {
+            var query = _dbContext.Pokemons
+                            .Where(x => x.Type == typeFilter || x.Type2 == typeFilter)
+                            .AsQueryable();
+
+            var totalItems = await query.CountAsync();
+            var list = await query.AsNoTracking()
+                       .Skip((paginationParams.PageNumber - 1) * paginationParams.ItemsInPage)
+                       .Take(paginationParams.ItemsInPage).ToListAsync();
+
+            return (list, totalItems);
+        }
+
+        public async Task<(List<Pokemon>, int)> GetPokemonsAllInOne(PaginationParams paginationParams)
+        {
+            var query = _dbContext.Pokemons.AsQueryable();
+
+            var list = await query.AsNoTracking()
+                       .Skip((paginationParams.PageNumber - 1) * paginationParams.ItemsInPage)
+                       .Take(paginationParams.ItemsInPage).ToListAsync();
+
+            return (list, 151);
+        }
     }
 }
