@@ -1,0 +1,38 @@
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0;
+}
+
+.card {
+  width: 300px;
+  background-color: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  text-align: center;
+}
+
+.card-image img {
+  width: 100%;
+  border-radius: 5px;
+  margin-bottom: 10px;
+}
+
+.card-number,
+.card-name {
+  margin: 10px 0;
+}
+
+.card-types {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+}
+
+.type {
+  flex: 1;
+  text-align: center;
+  margin: 0 5px;
+}

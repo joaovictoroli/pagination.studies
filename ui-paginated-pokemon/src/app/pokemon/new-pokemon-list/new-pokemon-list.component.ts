@@ -30,6 +30,8 @@ export class NewPokemonListComponent implements OnInit {
   ];
   @Input() nameFilterValue: string = '';
   @Input() typeFilterValue: string = '';
+  varNameFilter: string = '';
+  varTypeFilter: string = '';
   pokemons: Pokemon[] | undefined;
   pageNumber = 1;
   pageSize = 10;
@@ -38,32 +40,20 @@ export class NewPokemonListComponent implements OnInit {
   constructor(private pokemonService: PokemonService, private router: Router) {}
 
   ngOnInit(): void {
-    this.loadPokemons();
+    this.filtering(this.nameFilterValue!, this.typeFilterValue!);
   }
 
   pageChanged(event: PageChangedEvent) {
     if (this.pageNumber !== event.page) {
       this.pageNumber = event.page;
-      this.loadPokemons();
+      this.filtering(this.nameFilterValue!, this.typeFilterValue!);
     }
-  }
-
-  loadPokemons() {
-    var response = this.pokemonService
-      .getPokemons(this.pageNumber, this.pageSize)
-      .subscribe({
-        next: (response) => {
-          if (response.result && response.pagination) {
-            this.pokemons = response.result;
-            this.totalItens = response.pagination.totalItems;
-          }
-        },
-      });
   }
 
   open_detail(pokemonId: number) {
     this.router.navigate(['pokemon-detail', pokemonId]);
   }
+
   filtering(nameFilterValue: string, typeFilterValue: string) {
     let queryParams: QueryParams = {
       ItemsInPage: 10,
@@ -72,54 +62,13 @@ export class NewPokemonListComponent implements OnInit {
       typeFilter: typeFilterValue,
     };
 
-    console.log('aqui');
-    this.pokemonService.getPokemonsAllInOne(queryParams).subscribe({
+    var teste = this.pokemonService.getPokemonsAllInOne(queryParams).subscribe({
       next: (response) => {
-        console.log('aqui');
         if (response.result && response.pagination) {
           this.pokemons = response.result;
           this.totalItens = response.pagination.totalItems;
         }
       },
     });
-
-    console.log(this.pokemons);
   }
-
-  // open_detail(pokemonId: number) {
-  //   this.router.navigate(['pokemon-detail', pokemonId]);
-  // }
-  // filtering(
-  //   nameFilterValue: string | undefined,
-  //   typeFilterValue: string | undefined
-  // ) {
-  //   console.log(nameFilterValue);
-  //   console.log(typeof nameFilterValue);
-  //   switch (true) {
-  //     case typeof nameFilterValue == 'undefined' &&
-  //       typeof typeFilterValue == 'undefined': {
-  //       //both valid
-  //       console.log('teste1');
-  //       break;
-  //     }
-  //     case typeof nameFilterValue == 'undefined' &&
-  //       typeof typeFilterValue != 'undefined': {
-  //       // valid false
-  //       console.log('teste2');
-  //       break;
-  //     }
-  //     case typeof nameFilterValue != 'undefined' &&
-  //       typeof typeFilterValue == 'undefined': {
-  //       // false valid
-  //       console.log('teste3');
-  //       break;
-  //     }
-  //     case typeof nameFilterValue != 'undefined' &&
-  //       typeof typeFilterValue != 'undefined': {
-  //       //false false
-  //       console.log('teste4');
-  //       break;
-  //     }
-  //   }
-  // }
 }

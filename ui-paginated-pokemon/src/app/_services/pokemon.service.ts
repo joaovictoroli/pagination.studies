@@ -12,6 +12,7 @@ import { QueryParams } from '../models/queryParams';
 export class PokemonService {
   baseUrl = environment.apiUrl;
   pokemons: Pokemon[] = [];
+  pokemon?: Pokemon | undefined;
   constructor(private http: HttpClient) {}
 
   getPokemons(pageNumber: number, ItemsInPage: number) {
@@ -59,13 +60,23 @@ export class PokemonService {
     );
   }
 
+  //detaiil
+  getPokemonDetail(pokemonId: string) {
+    return this.http.get<Pokemon>(this.baseUrl + 'pokemons/' + pokemonId).pipe(
+      map((pokemon) => {
+        this.pokemon = pokemon;
+        return pokemon;
+      })
+    );
+  }
+
   // new pokemon-list
 
   getPokemonsAllInOne(queryParams: QueryParams) {
+    console.log(queryParams.typeFilter);
     var params = this.setParams(queryParams);
-
     var url = this.baseUrl + 'pokemons/allInOne';
-
+    console.log(params);
     return this.getPaginatedResult<Pokemon[]>(url, params, this.http).pipe(
       map((response) => {
         return response;
@@ -75,26 +86,18 @@ export class PokemonService {
   setParams(queryParams: QueryParams) {
     let params = new HttpParams()
       .set('PageNumber', queryParams.PageNumber!)
-      .set('ItemsInPage', queryParams.ItemsInPage!)
-      .set('nameFilter', queryParams.nameFilter!)
-      .set('typeFilter', queryParams.typeFilter);
+      .set('ItemsInPage', queryParams.ItemsInPage!);
 
-    if (queryParams.nameFilter == '') {
-      params = params.delete('nameFilter');
+    if (queryParams.nameFilter != '') {
+      params = params.set('nameFilter', queryParams.nameFilter!);
     }
-    if (queryParams.typeFilter == '') {
-      params = params.delete('typeFilter');
+    if (
+      queryParams.typeFilter != '' &&
+      typeof queryParams.typeFilter != 'undefined'
+    ) {
+      params = params.set('typeFilter', queryParams.typeFilter!);
     }
-
-    console.log(params);
 
     return params;
-  }
-
-  isValidParams(value: string): boolean {
-    if ((value = '')) {
-      return false;
-    }
-    return true;
   }
 }

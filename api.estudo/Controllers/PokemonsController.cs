@@ -58,7 +58,7 @@ namespace api.estudo.Controllers
         {
             (var pokemons, var totalItems) = await _pokemonRepository.GetPokemonsByFilters(nameFilter, typeFilter, paginationParams);
 
-            Response.Headers.Add("Pagination", totalItems.ToString());
+            Response.AddPaginationHeader(new PaginationHeader(totalItems));
             return Ok(pokemons);
         }
 
@@ -88,9 +88,9 @@ namespace api.estudo.Controllers
                     (pokemons, totalItems) = await _pokemonRepository.GetPokemonsAllInOne(nameFilter, typeFilter, paginationParams);
                     break;
 
-            }           
+            }
 
-            Response.Headers.Add("Pagination", totalItems.ToString());
+            Response.AddPaginationHeader(new PaginationHeader(totalItems));
             return Ok(pokemons);
         }
     }

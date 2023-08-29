@@ -1,1 +1,15 @@
-<p>pokemon-detail works!</p>
+<div class="container" *ngIf="pokemon | async as pokemon">
+  <div class="card">
+    <div class="card-image">
+      <img src="{{ pokemon.imgUrl }}" alt="Imagem" />
+    </div>
+    <div class="card-content">
+      <div class="card-number">ID: {{ pokemon.pokedexNumber }}</div>
+      <div class="card-name">Nome: {{ pokemon.name }}</div>
+      <div class="card-types">
+        <div class="type">Tipo 1: {{ pokemon.type }}</div>
+        <div class="type">Tipo 2: {{ pokemon.type2 }}</div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,8 +1,8 @@
-export class QueryParams {
+export interface QueryParams {
   PageNumber?: number;
   ItemsInPage?: number;
-  nameFilter?: string = '';
-  typeFilter: string = '';
+  nameFilter?: string;
+  typeFilter: string;
 
   // constructor(
   //   PageNumber: number,
